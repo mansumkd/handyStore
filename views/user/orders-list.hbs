@@ -1,0 +1,60 @@
+<section>
+    <div class="container">
+        
+
+        <table class="table mt-2" border="1">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Delievery Address</th>
+                    <th scope="col">Pincode</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Total Amount</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">OrderStatus</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    <td scope="row">.</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.deliveryDetails.pincode}}</td>
+                    <td>{{this.deliveryDetails.mobile}}</td>
+                    <td>{{this.totalAmount}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td>{{this.status}}</td>
+                    <td>
+                    <a href="/view-order-products/{{this._id}}" class="btn btn-primary">View Products</a>
+                    {{#if this.status.pending}}
+                    <a href="/view-order-products/{{this._id}}" class="btn btn-success">Place Order</a>
+                    {{/if}}
+                    </td>
+                </tr>
+                    
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<style>
+      tbody {
+  counter-reset: rowNum;
+}
+
+table tr {
+  
+  counter-increment: rowNum;
+
+}
+
+tbody tr td:first-child::before {
+  content: counter(rowNum);
+  
+}
+
+</style>

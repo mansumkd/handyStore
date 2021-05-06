@@ -1,0 +1,43 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Admin Panel</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/admin/products">All products<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">All Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">All Users</a>
+                </li>
+               
+
+
+            </ul>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle mr-2" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{#if superAdmin}}
+                    Super Admin
+                    {{/if}}
+                    Admin
+                    </button>
+                <div class="dropdown-menu mr-2" aria-labelledby="Account">
+                    
+            <a class="dropdown-item" href="/admin/settings">Settings</a>
+                    <a class="dropdown-item" href="/admin/logout">Sign-out</a>
+
+                   
+                </div>
+            </div>
+
+        </div>
+    </nav>
+</header>

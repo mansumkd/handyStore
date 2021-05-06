@@ -1,0 +1,129 @@
+<section>
+
+
+    <div class="container mt-4">
+
+
+        <div class="class col-md-4 ">
+            <div class="row">
+
+                <h3 class="text-center">Enter Delivery Details</h3>
+                <form id="checkout-form" method="POST" action="" style="margin-top: .5cm; margin-left:.5cm">
+
+                    <label for="">Address</label>
+                    <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address">
+
+                    <label for="">Pin</label>
+                    <input type="text" name="pincode" id="pincode" class="form-control" placeholder="Enter Postal Pin">
+
+                    <label for="">Phone</label>
+                    <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Phone Number">
+                    <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+                    <span>
+                        <div class="boxed">
+                            <h4>Total Amount: Rs.{{totalValue}}</h4>
+                            <hr>
+                            <h5>Payment Method</h5>
+
+                            <label for="">COD</label>
+
+                            <input type="radio" name="payment-method" value="COD">
+                            <br>
+                            <label for="">Online Payment</label>
+                            <input type="radio" name="payment-method" value="ONLINE">
+                            <br>
+                            <br>
+
+                            <button type="submit" class="btn btn-primary float-right mr-3">Checkout</button>
+
+                        </div>
+                    </span>
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('#checkout-form').submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                if (response.codSuccess) {
+                    location.href = '/order-success'
+                } else {
+
+                    razorpayPayment(response)
+                    console.log("razorpay Payment call")
+
+
+                }
+
+            }
+        })
+    })
+
+    function razorpayPayment(order) {
+        console.log("called")
+        var options = {
+            "key": "rzp_test_CtSrnpZc3RxFae", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Mindity",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Mansoor Ali",
+                "email": "manu@koori.com",
+                "contact": "9876875434"
+            },
+            "notes": {
+                "address": "Mindity Pvt Ltd"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+    function verifyPayment(payment,order){
+        $.ajax({
+            url:'/verify-payment',
+            data:{
+                payment,
+                order
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                    location.href='/order-success'
+                }else{
+                    alert('payment failed')
+                }
+            }
+        })
+    }
+
+</script>
+<style>
+    .boxed {
+        border: 1px solid rgb(105, 128, 105);
+        border-width: 1mm;
+        height: 6.3cm;
+        width: 8cm;
+
+        margin-top: 5px;
+    }
+</style>

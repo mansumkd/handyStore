@@ -1,0 +1,103 @@
+<section>
+    <div class="table ">
+        <h2 class="text-center mt-2">Admin Control Panel</h2>
+        <table id="adminTable" class="table text-center mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col"> </th>
+                </tr>
+            </thead>
+            {{#each adminList}}
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    <td><button  class="btn btn-danger" onclick="deleteAdmin('{{this._id}}')" >Delete</button></td>
+                </tr>
+            </tbody>
+            {{/each}}
+        </table>
+        <hr>
+        <form action="" method="POST" id="addAdmin">
+            <input class="mt-2" type="text" placeholder="Name" name="name" id="name">
+            <input class="mt-2" type="email" placeholder="Email" name="email" id="email">
+            <input class="mt-2" type="password" placeholder="Password" name="password" id="password">
+            <button class="btn-primary" type="submit">Add New Admin</button>
+            </form>
+           
+    </div>
+</section>
+<script>
+    $('#addAdmin').submit((e)=>{
+        e.preventDefault()
+        $.ajax({
+            method:'POST',
+            url:'/admin/add-admin',
+            data:$('#addAdmin').serialize(),
+            success:(response)=>{
+                
+             location.reload()   
+            }
+
+
+            
+        })
+
+
+    })
+    
+
+    $(function(){
+        $('#adminTable').DataTable();
+    });
+
+    
+
+    function deleteAdmin(adminId){
+        console.log(adminId)
+
+        $.ajax({
+            url:'/admin/delete-admin',
+            data:{
+                admin:adminId
+            },
+            method:'POST',
+            beforeSend:function(){
+                return confirm('Are you sure?')
+            },
+            success:(response)=>{
+                if(response){
+                    alert('Admin has removed')
+                    location.reload()
+                }
+                else{
+                    alert('something wrong happened')
+                }
+
+            }
+    
+        })
+       }
+</script>
+<style>
+    
+  tbody {
+    counter-reset: rowNumber;
+  }
+
+  table tr {
+
+    counter-increment: rowNumber;
+
+  }
+
+  tbody tr td:first-child::before {
+    content: counter(rowNumber);
+
+  }
+
+</style>

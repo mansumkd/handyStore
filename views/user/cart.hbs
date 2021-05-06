@@ -1,0 +1,137 @@
+      
+<style>
+     tbody{
+  counter-reset: rowNu;
+}
+
+tbody tr {
+  counter-increment: rowNu;
+}
+
+tbody tr td:first-child::before {
+  content: counter(rowNu);
+  
+}
+
+</style>
+   
+  <section>
+    {{#if cart}}
+      <h1>Cart Is Empty</h1>
+   {{/if}}   
+    <div class="container">
+      
+     
+        <table class="table" >
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Item</th>
+      <th scope="col">Title</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th> </th>
+    </tr>
+  </thead>
+  {{#each products}}
+  <tbody>
+    <tr>
+      
+      <td ></td> 
+      <td>
+          <img style="height: 70px; width:70px" src="/product-images/{{this.product._id}}.jpg" alt="">
+      </td>
+      
+      <td>
+         {{this.product.Name}}
+      </td>
+      <td>
+        Rs.{{this.product.Price}}
+      </td>
+      <td>
+        
+        <button class="cart-item-count mr-3 btn-primary"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
+        <span id="{{this.product._id}}">{{this.quantity}} </span>
+        <button class="cart-item-count ml-3 btn-primary" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
+      </td>
+      <td>
+        <button onclick="removeCartItem('{{this._id}}','{{this.product._id}}')" class="btn btn-danger">Remove</button>
+      </td>
+    </tr>
+  </tbody>
+  {{/each}}
+</table>
+<hr style="border-color: royalblue; border-radius:2pb;" >
+<h5 class="float-right mr-5" style="color:brown">Total Amount :<span style="color: cadetblue;">Rs.<span id="total">{{totalValue}}</span></span> </h5>
+<br>
+<a class="btn btn-success float-left" style="margin-left:75%;margin-top:3px; width:7cm;height:1.2cm;" href="/place-order"><h4>Place Order</h4> </a>
+    </div>
+    
+</section>
+
+
+
+
+<script>
+  function changeQuantity(cartId,prodId,userId,count){
+     let quantity=parseInt(document.getElementById(prodId).innerHTML)
+     count=parseInt(count)
+    
+
+    $.ajax({
+      url:'/change-product-quantity',
+      data:{
+        user:userId,
+        cart:cartId,
+        product:prodId,
+        count:count,
+        quantity:quantity
+
+      },
+      method:'post',
+      beforeSend:function(){
+        if(count === -1 && quantity === 1){
+
+          return confirm('The item will be removed from cart,confirm?')
+
+        }
+
+      },
+      success:(response)=>{
+        if(response.removeProduct){
+        alert("Product Removed From Cart")
+        location.reload()
+        }else{
+          document.getElementById(prodId).innerHTML=quantity+count
+          document.getElementById('total').innerHTML=response.total
+        }
+      }
+    })
+    
+
+
+  }
+
+  
+  function removeCartItem(cartId,prodId){
+    
+    $.ajax({
+      url:'/remove-cart-item',
+      data:{
+        cart:cartId,
+        product:prodId
+      },
+      method:'post',
+      beforeSend:function(){
+
+        return confirm('Are you sure to delete the item from Cart')
+
+      },
+      success:(response)=>{
+        alert('Item has removed')
+        location.reload()
+      }
+    })
+  }
+</script>
+

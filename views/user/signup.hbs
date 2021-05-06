@@ -1,0 +1,25 @@
+<div class="container">
+    <h2>Register User</h2>
+    <form class="container mt-3" action="/signup" method="POST">
+        <div class="form-group">
+            <label for="Name">Name</label>
+            <input name="Name" style="width: 33%;" type="text" class="form-control" id="Name" placeholder="Name">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input name="Email" style="width: 33%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input name="Password" style="width: 33%;" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Signup</button>
+        <div class="row mt-2 ml-5">
+        <a href="/login"> Already have an Account?</a>
+        </div>
+    </form>
+
+</div>
